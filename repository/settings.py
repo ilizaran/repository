@@ -117,6 +117,7 @@ FOOTER = env('FOOTER')
 TITLE = env('TITLE')
 IMAGEN_LOGO = env('IMAGEN_LOGO')
 DESCRIPTION = env('DESCRIPTION')
+URL = env('URL')
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
