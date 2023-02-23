@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load filename %}
+
+{% block title %}{{ block.super }} - {% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+             <h1><a href="/"><i class="bi bi-caret-left-fill"></i></a> Registros por lugar de producción: {{lugares}} </h1>
+
+<ul>
+    {% for reg in registros %}
+          <li><a href="{% url "mostrar_registro" reg.identificador %}">{{ reg.name }}</a></li>
+     {% endfor %}
+
+</ul>
+</div></div>
+{% endblock %}

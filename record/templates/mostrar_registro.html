@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load settings_value from tags_base %}
+{% load filename %}
+
+{% block title %}{{ block.super }} - {% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <img src="{% settings_value "URL"%}{{registro.ico}}" alt="{{registro.name}}" class="img-thumbnail">
+    </div>
+    <div class="col-md-8">
+        <h2>{{registro.name}}</h2>
+
+        <dl class="dl-horizontal">
+          <dt>Signatura:</dt>
+          <dd> {{registro.signature|default_if_none:""}}</dd>
+
+          <dt>Autor:</dt>
+          <dd>
+          {% for author in registro.author.all %}{{ author }} - <small>{{author.description}}</small><br/>{% endfor %}
+          </dd>
+
+          <dt>Tipo de documento:</dt>
+          <dd>{{registro.typerecord|default_if_none:""}}</dd>
+
+          <dt>Colección:</dt>
+          <dd>{{registro.collection|default_if_none:""}}</dd>
+
+          <dt>Fecha de producción:</dt>
+          <dd>{{registro.productionDate|default_if_none:""|date:"Y"}}</dd>
+
+          <dt>Lugar de producción:</dt>
+          <dd>{{registro.place|default_if_none:""}}</dd>
+
+          <dt>Adquisición:</dt>
+          <dd>{{registro.acquisition|default_if_none:""}}</dd>
+
+          <dt>Entrada al repositorio:</dt>
+          <dd>{{registro.date|default_if_none:""}} </dd>
+
+          <dt>Descripción:</dt>
+          <dd>{{registro.description| safe |default_if_none:""}}</dd>
+
+        </dl>
+    </div>
+</div>
+
+<h3>Ficheros</h3>
+
+{% regroup ficheros by group as ficheros_list %}
+
+<ul>
+{% for fi in ficheros_list %}
+    <li>{{ fi.grouper }}
+    <ul>
+        {% for fii in fi.list %}
+           {% ifequal  fii.filebrowse.filetype "Image" %}
+           <a href='{% settings_value "URL"%}{{fii.filebrowse}}'> <img src="{{ fii.filebrowse.url }}" class="img-responsive img-thumbnail" width="200" alt="{{ fii.filebrowse|filename }}"/> </a>
+           {% else %}
+          <li><a href='{% settings_value "URL"%}{{fii.filebrowse}}'>{{ fii.filebrowse|filename }}</a></li>
+          {% endifequal %}
+        {% endfor %}
+    </ul>
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock %}

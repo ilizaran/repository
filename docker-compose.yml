@@ -1,0 +1,18 @@
+version: '3.4'
+services:
+  repository:
+    container_name: repository-container
+    restart: always
+    ports:
+      - target: 80
+        published: 9901
+        protocol: tcp
+        mode: host
+    
+    volumes:
+        - ./servidor:/code/servidor
+
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile
+

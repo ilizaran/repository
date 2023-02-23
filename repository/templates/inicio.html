@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load django_tables2 %}
+{% load settings_value from tags_base %}
+{% load humanize %}
+
+{% block extra_head %}
+<script>
+   $(document).ready( function() {
+     $("form:not(.filter) :input:visible:enabled:first").focus(); //foco al primer campo del formulario
+  });
+</script>
+{% endblock %}
+
+{% block title %}{{ block.super }} - {% endblock %}
+
+{% block content %}
+
+
+    <div class="card">
+      <div class="card-header">
+        <p>{% settings_value "DESCRIPTION"%}</p>
+      </div>
+      <div class="card-body">
+        <strong> Buscar:</strong>
+
+        <form  action="" method="get" role="form" >
+        {% csrf_token %}
+
+        <div class="row">
+          <div class="col-4 ">
+            {{formulario.form.name.label}}: {{formulario.form.name}}
+          </div>
+
+          <div class="col-2">            
+            {{formulario.form.signature.label}}: {{formulario.form.signature}}
+          </div>
+          <div class="w-100"></div>
+            <div class="col-4">
+              {{formulario.form.author.label}}: {{formulario.form.author}}
+            </div>
+
+            <div class="col-4">
+              {{formulario.form.collection.label}}: {{formulario.form.collection}}
+            </div>
+
+            <div class="w-100"></div>
+            <div class="col-2">
+              {{formulario.form.place.label}}: {{formulario.form.place}}
+            </div>
+            <div class="col-2">
+              {{formulario.form.typerecord.label}}: {{formulario.form.typerecord}}
+            </div>
+            <div class="col-4">
+              {{formulario.form.description.label}}: {{formulario.form.description}}
+            </div>
+        </div>
+
+        <div class="form-group mt-3">
+        <input type="submit" value="Buscar" class="btn btn-primary"/>
+        </div>
+        </form>
+      </div>
+
+</div>
+
+    {% if nada %}
+    <div class="alert alert-info" role="alert"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> {{ nada }}</div>
+    {% endif %}
+
+     {% if table %}
+     <div class="row">
+    {% render_table table %}
+    </div>
+    {% endif %}
+
+
+
+    <div class="row">
+
+        {% if colecciones %}
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-body">
+              <h4 class="card-title">Colecciones</h4>
+              <ul>
+             {% for co in colecciones %}
+                      <li><a class="card-text" href='{% url "listado_por_coleccion" co.id %}'>{{ co }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  </div>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {% if tipos %}
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-body">
+            <h4 class="card-title">Tipos de recursos</h4>
+            <ul>
+             {% for ti in tipos %}
+                      <li><a class="card-text" href="{% url "listado_por_tipo_material" ti.id %}">{{ ti }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if lugares %}
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-body">
+            <h4 class="card-title">Lugares</h4>
+            <ul>
+             {% for lu in lugares %}
+                      <li><a class="card-text" href="{% url "listado_por_lugares" lu.id %}">{{ lu }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  </div>
+                </div>
+            </div>
+        {% endif %}
+         <div class="clearfix visible-sm-block"></div>
+    </div>
+
+{% endblock %}
+
+
+{% block footer %}
+    {% if registros %}
+    <p style="font-size:11px;width:400px;margin:10px auto 10px auto;text-align:center">
+    {{registros | intcomma}} registros en el repositorio y {{ficheros | intcomma}} ficheros digitales <br>
+    {% now "d F Y" %}
+    </p>
+    {% endif %}
+{% endblock %}
