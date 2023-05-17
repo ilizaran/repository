@@ -58,7 +58,7 @@ class File(models.Model):
     record = models.ForeignKey(Record,related_name="files", null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.filebrowse
+        return str(self.filebrowse)
 
 
 class SelectFileManager(models.Manager):
